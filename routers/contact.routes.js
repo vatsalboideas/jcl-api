@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const ContactController = require('../controllers/contactUs.controller');
+const decryptionMiddleware = require('../middlewares/transport.decryption.middlware');
 
 // Create contact form submission
-router.post('/', ContactController.createContact);
+router.post('/', decryptionMiddleware, ContactController.createContact);
 
 // Get all contact forms with pagination
 router.get('/', ContactController.getAllContacts);

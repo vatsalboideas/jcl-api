@@ -2,9 +2,15 @@ const express = require('express');
 const router = express.Router();
 const MediaController = require('../controllers/media.controller');
 const uploadMiddleware = require('../utils/media');
+const jwtAuth = require('../middlewares/authentication.middleware');
 
 // Upload single media file
-router.post('/upload', uploadMiddleware, MediaController.uploadMedia);
+router.post(
+  '/upload',
+  // jwtAuth.requireReadAccess,
+  uploadMiddleware,
+  MediaController.uploadMedia
+);
 
 // Get all media with pagination
 router.get('/', MediaController.getAllMedia);

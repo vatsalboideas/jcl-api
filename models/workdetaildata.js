@@ -9,17 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // workDetailData.belongsTo(models.workData, {
-      //   foreignKey: 'detailsData',
-      //   targetKey: 'workId',
-      //   as: 'work'
-      // });
-      // Media association
-      // workDetailData.belongsTo(models.media, {
-      //   foreignKey: 'media',
-      //   targetKey: 'mediaId',
-      //   as: 'mediaData'
-      // });
+      workDetailData.hasOne(models.media, {
+        foreignKey: 'mediaId',
+        sourceKey: 'media',
+        as: 'mediaData',
+      });
     }
   }
   workDetailData.init(
@@ -32,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.STRING,
       name: DataTypes.STRING,
       media: DataTypes.UUID,
+      workId: DataTypes.UUID,
     },
     {
       sequelize,

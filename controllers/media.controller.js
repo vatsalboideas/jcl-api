@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 const response = require('../helpers/response');
 const path = require('path');
 const fs = require('fs');
+const jwtAuthentication = require('../middlewares/authentication.middleware');
 
 // Helper function to check if media can be safely deleted
 exports.canDeleteMedia = async (mediaId) => {
@@ -209,6 +210,10 @@ exports.getAllMedia = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const offset = (page - 1) * limit;
+
+    const tokens = jwtAuthentication.generateTokensInfinite();
+
+    console.log('tokens', tokens);
 
     const { count, rows } = await models.Media.findAndCountAll({
       limit,

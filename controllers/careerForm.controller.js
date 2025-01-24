@@ -4,6 +4,7 @@ const models = require('../models/index');
 const Joi = require('joi');
 const { v4: uuidv4 } = require('uuid');
 const response = require('../helpers/response');
+const { sendEmail } = require('../services/emailServices');
 
 // Validation schema for career form
 const careerFormSchema = Joi.object({
@@ -15,16 +16,26 @@ const careerFormSchema = Joi.object({
   portfolioLink: Joi.string().uri().allow('').optional(),
   message: Joi.string().required().trim(),
   emailId: Joi.string().required().email(),
-  resume: Joi.string().required(), // Assuming resume is a UUID reference to uploaded file
+  resume: Joi.string().uuid().required(), // Assuming resume is a UUID reference to uploaded file
 });
 
 // Create career form submission
 exports.createCareer = async (req, res) => {
   try {
+    // console.log('req.body', req.body);
     // Validate request body
     const { error } = careerFormSchema.validate(req.body);
     if (error) {
+      console.log('error', error);
       return response.response(res, true, 400, error.details[0].message);
+    }
+
+    const mediaCheck = await models.Media.findOne({
+      where: { mediaId: req.body.resume },
+    });
+
+    if (!mediaCheck) {
+      throw new Error('Resume not found !');
     }
 
     // Create career form record
@@ -35,18 +46,30 @@ exports.createCareer = async (req, res) => {
       updatedAt: new Date(),
     });
 
+    const resume = await models.Media.findOne({
+      where: { mediaId: req.body.resume },
+    });
+
+    // console.log('resume', resume);
+
+    await sendEmail({
+      subject: 'Career Form Submission',
+      template: 'career',
+      data: { ...req.body, resume: resume.url },
+    });
+
     return response.response(
       res,
       false,
       201,
-      'Career form submitted successfully',
-      {
-        careerId: career.careerId,
-        firstName: career.firstName,
-        lastName: career.lastName,
-        emailId: career.emailId,
-        portfolioLink: career.portfolioLink,
-      }
+      'Career form submitted successfully'
+      // {
+      //   careerId: career.careerId,
+      //   firstName: career.firstName,
+      //   lastName: career.lastName,
+      //   emailId: career.emailId,
+      //   portfolioLink: career.portfolioLink,
+      // }
     );
   } catch (error) {
     console.error('Career form submission error:', error);

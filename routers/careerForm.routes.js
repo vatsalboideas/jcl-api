@@ -2,9 +2,10 @@
 const express = require('express');
 const router = express.Router();
 const careerController = require('../controllers/careerForm.controller');
+const decryptionMiddleware = require('../middlewares/transport.decryption.middlware');
 
 // Create new career form submission
-router.post('/', careerController.createCareer);
+router.post('/', decryptionMiddleware, careerController.createCareer);
 
 // Get all career form submissions with pagination
 router.get('/', careerController.getAllCareers);

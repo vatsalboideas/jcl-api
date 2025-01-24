@@ -1,23 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const WorkDetailController = require('../controllers/workData.controller');
+const workController = require('../controllers/work.controller');
 
-// Create new work detail
-router.post('/', WorkDetailController.createWorkDetail);
-
-// Get all work details (admin route)
-router.get('/all', WorkDetailController.getAllWorkDetails);
-
-// Get all details for a specific work
-router.get('/work/:workId', WorkDetailController.getWorkDetails);
-
-// Get specific work detail by ID
-router.get('/:workDetailId', WorkDetailController.getWorkDetailById);
-
-// Update work detail
-router.put('/:workDetailId', WorkDetailController.updateWorkDetail);
-
-// Delete work detail
-router.delete('/:workDetailId', WorkDetailController.deleteWorkDetail);
+router.post('/', workController.createWork);
+router.get('/', workController.getAllWorks);
+router.get('/:workId', workController.getWorkById);
+router.get('/slug/:slug', workController.getWorkBySlug);
+router.put('/:workId', workController.updateWork);
+router.delete('/:workId', workController.deleteWork);
 
 module.exports = router;

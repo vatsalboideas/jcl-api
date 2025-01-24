@@ -9,26 +9,27 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // workData.hasMany(models.workDetailData, {
-      //   foreignKey: 'detailsData',
-      //   sourceKey: 'workId',
-      //   as: 'details'
-      // });
+      workData.hasMany(models.workDetailData, {
+        foreignKey: 'workId',
+        sourceKey: 'workId',
+        as: 'workDetails',
+      });
 
-      // Media associations
       workData.hasOne(models.media, {
-        foreignKey: 'landscapeImage',
-        targetKey: 'mediaId',
+        foreignKey: 'mediaId', // Refers to the column in the `media` table
+        sourceKey: 'landscapeImage', // Refers to the column in the `workData` table
         as: 'landscapeImageData',
       });
+
       workData.hasOne(models.media, {
-        foreignKey: 'verticalImage',
-        targetKey: 'mediaId',
+        foreignKey: 'mediaId', // Refers to the column in the `media` table
+        sourceKey: 'verticalImage', // Refers to the column in the `workData` table
         as: 'verticalImageData',
       });
+
       workData.hasOne(models.media, {
-        foreignKey: 'squareImage',
-        targetKey: 'mediaId',
+        foreignKey: 'mediaId', // Refers to the column in the `media` table
+        sourceKey: 'squareImage', // Refers to the column in the `workData` table
         as: 'squareImageData',
       });
     }

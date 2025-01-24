@@ -4,6 +4,7 @@ const models = require('../models/index');
 const Joi = require('joi');
 const { v4: uuidv4 } = require('uuid');
 const response = require('../helpers/response');
+const { sendEmail } = require('../services/emailServices');
 
 // Validation schema for contact form
 const contactFormSchema = Joi.object({
@@ -34,18 +35,17 @@ exports.createContact = async (req, res) => {
       updatedAt: new Date(),
     });
 
+    await sendEmail({
+      subject: 'Contact Form Submission',
+      template: 'contact',
+      data: req.body,
+    });
+
     return response.response(
       res,
       false,
       201,
-      'Contact form submitted successfully',
-      {
-        contactId: contact.contactId,
-        firstName: contact.firstName,
-        lastName: contact.lastName,
-        emailId: contact.emailId,
-        subject: contact.subject,
-      }
+      'Contact form submitted successfully'
     );
   } catch (error) {
     console.error('Contact form submission error:', error);

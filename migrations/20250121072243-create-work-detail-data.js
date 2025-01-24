@@ -24,6 +24,9 @@ module.exports = {
       media: {
         type: Sequelize.UUID,
       },
+      workId: {
+        type: Sequelize.UUID,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
