@@ -12,13 +12,13 @@ router.post(
   MediaController.uploadMedia
 );
 
-// Get all media with pagination
-router.get('/', MediaController.getAllMedia);
+// // Get all media with pagination
+// router.get('/', MediaController.getAllMedia);
 
-// Get specific media by ID
-router.get('/:mediaId', MediaController.getMediaById);
+// // Get specific media by ID
+// router.get('/:mediaId', MediaController.getMediaById);
 
-// Delete media
-router.delete('/:mediaId', MediaController.deleteMedia);
+// // Delete media
+// router.delete('/:mediaId', MediaController.deleteMedia);
 
 module.exports = router;

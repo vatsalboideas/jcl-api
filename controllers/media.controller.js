@@ -5,7 +5,7 @@ const Joi = require('joi');
 const { v4: uuidv4 } = require('uuid');
 const response = require('../helpers/response');
 const path = require('path');
-const fs = require('fs');
+const { promises: fs } = require('fs'); // Import the promise-based fs methods
 const jwtAuthentication = require('../middlewares/authentication.middleware');
 
 // Helper function to check if media can be safely deleted
@@ -146,6 +146,64 @@ exports.getMediaById = async (req, res) => {
 // };
 
 // Delete media
+// exports.deleteMedia = async (req, res) => {
+//   try {
+//     const { mediaId } = req.params;
+
+//     // First check if this media is referenced anywhere
+//     const [workWithLandscape, workWithVertical, workWithSquare, workDetail] =
+//       await Promise.all([
+//         models.workData.findOne({ where: { landscapeImage: mediaId } }),
+//         models.workData.findOne({ where: { verticalImage: mediaId } }),
+//         models.workData.findOne({ where: { squareImage: mediaId } }),
+//         models.workDetailData.findOne({ where: { media: mediaId } }),
+//       ]);
+
+//     if (workWithLandscape || workWithVertical || workWithSquare || workDetail) {
+//       return response.response(
+//         res,
+//         true,
+//         400,
+//         'Cannot delete media as it is being used in work data or work details'
+//       );
+//     }
+
+//     const media = await models.media.findOne({
+//       where: { mediaId },
+//     });
+
+//     if (!media) {
+//       return response.response(res, true, 404, 'Media not found');
+//     }
+
+//     try {
+//       // Get absolute file path
+//       const filePath = path.resolve(media.url);
+
+//       // Check if file exists
+//       await fs.access(filePath);
+
+//       // Delete file from filesystem
+//       await fs.unlink(filePath);
+//     } catch (fileError) {
+//       console.error('File deletion error:', fileError);
+//       // We'll continue with database deletion even if file deletion fails
+//       // but we'll log the error for monitoring
+//       console.warn(`File not found or could not be deleted: ${media.url}`);
+//     }
+
+//     // Delete from database
+//     await media.destroy();
+
+//     return response.response(res, false, 200, 'Media deleted successfully');
+//   } catch (error) {
+//     console.error('Delete media error:', error);
+//     return response.response(res, true, 500, 'Error deleting media', {
+//       error: error.message,
+//     });
+//   }
+// };
+
 exports.deleteMedia = async (req, res) => {
   try {
     const { mediaId } = req.params;
@@ -180,10 +238,8 @@ exports.deleteMedia = async (req, res) => {
       // Get absolute file path
       const filePath = path.resolve(media.url);
 
-      // Check if file exists
+      // Check if file exists and delete file from filesystem
       await fs.access(filePath);
-
-      // Delete file from filesystem
       await fs.unlink(filePath);
     } catch (fileError) {
       console.error('File deletion error:', fileError);
@@ -210,10 +266,6 @@ exports.getAllMedia = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const offset = (page - 1) * limit;
-
-    const tokens = jwtAuthentication.generateTokensInfinite();
-
-    console.log('tokens', tokens);
 
     const { count, rows } = await models.Media.findAndCountAll({
       limit,

@@ -24,6 +24,7 @@ const encrypt = (text) => {
 
 const decrypt = (text) => {
   if (!text) return text;
+  if (!text.includes(':')) return text;
   try {
     const textParts = text.split(':');
     const iv = Buffer.from(textParts.shift(), 'hex');

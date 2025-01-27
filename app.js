@@ -3,8 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
-
 const { sequelize } = require('./models');
+const startCleanupCron = require('./utils/cron-jobs');
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -37,9 +37,9 @@ const careerFormRoutes = require('./routers/careerForm.routes');
 
 app.use('/api/v1/media', mediaRoutes);
 app.use('/api/v1/contact-us', contactUsRoutes);
-app.use('/api/v1/instagram', instagramRoutes);
-app.use('/api/v1/work-data', workDataRoutes);
-app.use('/api/v1/work-detail-data', workDetailDataRoutes);
+// app.use('/api/v1/instagram', instagramRoutes);
+// app.use('/api/v1/work-data', workDataRoutes);
+// app.use('/api/v1/work-detail-data', workDetailDataRoutes);
 app.use('/api/v1/career-form', careerFormRoutes);
 
 //upload folder configuration
@@ -47,6 +47,8 @@ app.use('/api/v1/career-form', careerFormRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // start server
+
+startCleanupCron();
 
 app.listen(
   {
