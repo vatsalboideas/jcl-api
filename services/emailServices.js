@@ -21,7 +21,7 @@ const templates = {
       <h2 style="color: #2a2a2a;">Career Form Submission</h2>
       <p><strong>First Name:</strong> ${data.firstName}</p>
       <p><strong>Last Name:</strong> ${data.lastName}</p>
-      <p><strong>Email ID:</strong> ${data.emailID}</p>
+      <p><strong>Email ID:</strong> ${data.emailId}</p>
       <p><strong>Phone Number:</strong> ${data.contactNumber}</p>
       ${data.portfolioLink ? `<p><strong>Portfolio Link:</strong> <a href="${data.portfolioLink}" target="_blank">${data.portfolioLink}</a></p>` : ''}
       ${data.message ? `<p><strong>Message:</strong><br />${data.message}</p>` : ''}
