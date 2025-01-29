@@ -7,7 +7,7 @@ const jwtAuth = require('../middlewares/authentication.middleware');
 // Create contact form submission
 router.post(
   '/',
-  // jwtAuth.requireWriteAccess,
+  jwtAuth.requireWriteAccess,
   decryptionMiddleware,
   ContactController.createContact
 );

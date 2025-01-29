@@ -8,7 +8,7 @@ const decryptionMiddleware = require('../middlewares/transport.decryption.middlw
 // Create new career form submission
 router.post(
   '/',
-  // jwtAuth.requireWriteAccess,
+  jwtAuth.requireWriteAccess,
   decryptionMiddleware,
   careerController.createCareer
 );
