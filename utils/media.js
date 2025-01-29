@@ -2,13 +2,13 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Define allowed file types
+// Define allowed file types with their valid extensions
 const ALLOWED_FILE_TYPES = {
-  'image/jpeg': 'JPEG/JPG',
-  'image/jpg': 'JPEG/JPG',
-  'image/png': 'PNG',
-  'image/webp': 'WebP',
-  'application/pdf': 'PDF',
+  'image/jpeg': ['jpg', 'jpeg'],
+  'image/jpg': ['jpg', 'jpeg'],
+  'image/png': ['png'],
+  'image/webp': ['webp'],
+  'application/pdf': ['pdf'],
 };
 
 // PDF Security Check Function
@@ -90,12 +90,29 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 const fileFilter = (req, file, cb) => {
-  // Check if file type is allowed
+  // Get file extension from original filename
+  const extension = path.extname(file.originalname).toLowerCase().slice(1);
+
+  console.log(extension, 'extension');
+
+  // Check if mimetype is allowed
   if (!ALLOWED_FILE_TYPES[file.mimetype]) {
     return cb(
       {
         status: 400,
-        message: `File type not allowed. Allowed types are: ${Object.values(ALLOWED_FILE_TYPES).join(', ')}`,
+        message: `File type not allowed.`,
+      },
+      false
+    );
+  }
+
+  // Check if extension matches the allowed extensions for the mimetype
+  const allowedExtensions = ALLOWED_FILE_TYPES[file.mimetype];
+  if (!allowedExtensions.includes(extension)) {
+    return cb(
+      {
+        status: 400,
+        message: `Invalid file extension.`,
       },
       false
     );
@@ -125,9 +142,10 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    // Create unique filename with original extension
+    // Create unique filename while preserving original extension
+    const extension = path.extname(file.originalname).toLowerCase();
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
+    cb(null, uniqueSuffix + extension);
   },
 });
 

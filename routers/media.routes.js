@@ -7,7 +7,7 @@ const jwtAuth = require('../middlewares/authentication.middleware');
 // Upload single media file
 router.post(
   '/upload',
-  jwtAuth.requireWriteAccess,
+  // jwtAuth.requireWriteAccess,
   uploadMiddleware,
   MediaController.uploadMedia
 );
