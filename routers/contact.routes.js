@@ -8,7 +8,7 @@ const jwtAuth = require('../middlewares/authentication.middleware');
 router.post(
   '/',
   jwtAuth.requireWriteAccess,
-  decryptionMiddleware,
+  // decryptionMiddleware,
   ContactController.createContact
 );
 
