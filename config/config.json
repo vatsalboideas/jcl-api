@@ -14,7 +14,7 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "strapi_root",
+    "username": "new_user",
     "password": "password",
     "database": "jcl_production",
     "host": "127.0.0.1",
