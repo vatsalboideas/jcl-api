@@ -7,14 +7,14 @@
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
+    "username": "strapi_root",
+    "password": "password",
+    "database": "jcl_production",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
-    "username": "new_user",
+    "username": "root",
     "password": "password",
     "database": "jcl_production",
     "host": "127.0.0.1",
