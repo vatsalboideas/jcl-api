@@ -83,8 +83,10 @@ const requireReadAccess = async (req, res, next) => {
 // Middleware for write access
 const requireWriteAccess = async (req, res, next) => {
   try {
+    console.log(`req.headers`, req.headers);
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
+      console.log(`token not found`);
       return response.response(res, true, 401, 'Access token is required');
     }
 
