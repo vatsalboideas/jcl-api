@@ -6,7 +6,7 @@ const createTransporter = () => {
   return nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
-    secure: process.env.SMTP_SECURE === 'true',
+    // secure: process.env.SMTP_SECURE === 'true',
     // auth: {
     //   user: process.env.SMTP_USERNAME,
     //   pass: process.env.SMTP_PASSWORD,
@@ -90,12 +90,17 @@ const sendEmail = async ({ subject, template, data }) => {
     };
   } catch (error) {
     // Log the error with context but don't throw
-    console.error('Email sending failed:', {
-      errorMessage: error.message,
-      template,
-      dataKeys: Object.keys(data || {}),
-      subject,
-    });
+    console.error(
+      'Email sending failed:',
+      {
+        errorMessage: error.message,
+        template,
+        dataKeys: Object.keys(data || {}),
+        subject,
+      },
+      mailOptions.from,
+      mailOptions.to
+    );
 
     // Return a failure object instead of throwing an error
     return { success: false };
