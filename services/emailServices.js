@@ -73,6 +73,8 @@ const sendEmail = async ({ subject, template, data }) => {
       html: templates[template](data),
     };
 
+    console.log('mailOptions', mailOptions);
+
     const info = await transporter.sendMail(mailOptions);
 
     console.log(
@@ -86,7 +88,7 @@ const sendEmail = async ({ subject, template, data }) => {
 
     return {
       success: true,
-      messageId: info.messageId,
+      message: info.messageId,
     };
   } catch (error) {
     // Log the error with context but don't throw
@@ -95,12 +97,10 @@ const sendEmail = async ({ subject, template, data }) => {
       template,
       dataKeys: Object.keys(data || {}),
       subject,
-      mailOptions: mailOptions.from,
-      mailOptions: mailOptions.to,
     });
 
     // Return a failure object instead of throwing an error
-    return { success: false };
+    return { success: false, message: error.message };
   }
 };
 

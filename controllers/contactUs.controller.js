@@ -35,11 +35,28 @@ exports.createContact = async (req, res) => {
       updatedAt: new Date(),
     });
 
-    await sendEmail({
-      subject: 'Contact Form Submission',
-      template: 'contact',
-      data: req.body,
-    });
+    // Handle email sending separately
+    try {
+      const emailResult = await sendEmail({
+        subject: 'Contact Form Submission',
+        template: 'contact',
+        data: req.body,
+      });
+
+      if (!emailResult.success) {
+        // Log email failure but don't affect main response
+        console.warn('Email notification failed but contact was created:', {
+          contactId: contact.contactId,
+          emailError: emailResult.error,
+        });
+      }
+    } catch (emailError) {
+      // Log any unexpected email errors but don't affect main response
+      console.error('Unexpected error in email notification:', {
+        contactId: contact.contactId,
+        error: emailError.message,
+      });
+    }
 
     return response.response(
       res,
