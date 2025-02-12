@@ -90,17 +90,14 @@ const sendEmail = async ({ subject, template, data }) => {
     };
   } catch (error) {
     // Log the error with context but don't throw
-    console.error(
-      'Email sending failed:',
-      {
-        errorMessage: error.message,
-        template,
-        dataKeys: Object.keys(data || {}),
-        subject,
-      },
-      mailOptions.from,
-      mailOptions.to
-    );
+    console.error('Email sending failed:', {
+      errorMessage: error.message,
+      template,
+      dataKeys: Object.keys(data || {}),
+      subject,
+      mailOptions: mailOptions.from,
+      mailOptions: mailOptions.to,
+    });
 
     // Return a failure object instead of throwing an error
     return { success: false };
