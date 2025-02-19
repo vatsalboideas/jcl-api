@@ -9,7 +9,7 @@ const decryptionMiddleware = require('../middlewares/transport.decryption.middlw
 router.post(
   '/',
   jwtAuth.requireWriteAccess,
-  // decryptionMiddleware,
+  decryptionMiddleware,
   careerController.createCareer
 );
 
