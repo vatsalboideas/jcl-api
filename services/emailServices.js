@@ -68,7 +68,10 @@ const sendEmail = async ({ subject, template, data }) => {
 
     const mailOptions = {
       from: process.env.SMTP_FROM_EMAIL,
-      to: 'vatsal.soni@boideas.com',
+      to:
+        template === 'career'
+          ? process.env.CAREER_EMAIL
+          : process.env.CONTACT_EMAIL,
       subject,
       html: templates[template](data),
     };
