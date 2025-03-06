@@ -68,6 +68,7 @@ const sendEmail = async ({ subject, template, data }) => {
 
     const mailOptions = {
       from: process.env.SMTP_FROM_EMAIL,
+      // to: process.env.SMTP_TO_EMAIL,
       to:
         template === 'career'
           ? process.env.CAREER_EMAIL
@@ -86,7 +87,8 @@ const sendEmail = async ({ subject, template, data }) => {
       info.response,
       template,
       'to',
-      data.emailId
+      data.emailId,
+      info
     );
 
     return {
