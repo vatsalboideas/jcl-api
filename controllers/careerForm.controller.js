@@ -14,7 +14,7 @@ const careerFormSchema = Joi.object({
     .required()
     .pattern(/^\+?[\d\s-]+$/),
   portfolioLink: Joi.string().uri().allow('').optional(),
-  message: Joi.string().required().trim(),
+  message: Joi.string().trim().allow(null, '').optional(),
   emailId: Joi.string().required().email(),
   resume: Joi.string().uuid().required(), // Assuming resume is a UUID reference to uploaded file
 });
